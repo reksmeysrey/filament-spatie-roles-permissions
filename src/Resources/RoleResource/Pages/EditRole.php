@@ -3,8 +3,9 @@
 namespace Reksmey\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages;
 
 use Illuminate\Support\Arr;
-use Reksmey\FilamentSpatieRolesPermissions\Resources\RoleResource;
 use Filament\Resources\Pages\EditRecord;
+use Spatie\Permission\Models\Permission;
+use Reksmey\FilamentSpatieRolesPermissions\Resources\RoleResource;
 
 class EditRole extends EditRecord
 {
@@ -14,24 +15,25 @@ class EditRole extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $data = Arr::Only($this->data, 'name');
-        $data['permissions'] = Arr::except($this->data, ['guard_name', 'id','name', 'select_all', 'created_at', 'updated_at']);
+        $this->permissions = static::onlyPermissionsKeys($data);
 
-        return $data;
+        return Arr::Only($data, 'name');
     }
-
-    public function beforeSave()
-    {
-        $this->permissions = array_filter(Arr::except($this->data, ['guard_name', 'id','name', 'select_all', 'created_at', 'updated_at']));
-
-        $this->permissions = collect(array_keys($this->permissions))->map(fn ($value, $key) => ['name' => $value])->all();
-    }
-
 
     public function afterSave()
     {
+        $permissions = [];
+        foreach ($this->permissions as $name) {
+            $permissions[] = Permission::findOrCreate($name);
+        }
+
         $this->record->touch();
-        $this->record->syncPermissions($this->permissions);
+        $this->record->syncPermissions($permissions);
+    }
+
+    public static function onlyPermissionsKeys($data)
+    {
+        return array_keys(array_filter(Arr::except($data, ['guard_name', 'id','name', 'select_all', 'created_at', 'updated_at'])));
     }
 
 

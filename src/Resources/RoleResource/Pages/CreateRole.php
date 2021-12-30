@@ -15,22 +15,20 @@ class CreateRole extends CreateRecord
 
     public function beforeCreate()
     {
-        $this->permissions = array_keys(array_filter(Arr::except($this->data, ['name', 'select_all'])));
+        $this->permissions = array_keys(array_filter(Arr::except($this->data, ['name', 'select_all', 'guard_name'])));
     }
 
     public function afterCreate()
     {
-        $_permissions = [];
+        $permissions = [];
         foreach ($this->permissions as $name) {
-            $_permissions[] = Permission::findOrCreate($name);
+            $permissions[] = Permission::findOrCreate($name);
         }
-        $this->record->syncPermissions($_permissions);
+        $this->record->syncPermissions($permissions);
     }
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data = Arr::Only($this->data, 'name');
-
-        return $data;
+        return Arr::Only($this->data, 'name');
     }
 }

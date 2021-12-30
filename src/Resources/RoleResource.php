@@ -15,9 +15,28 @@ use Reksmey\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages;
 
 class RoleResource extends Resource
 {
-    protected static ?string $model = Role::class;
+
+    public static function getModel(): string
+    {
+        return config('permission.models.role', Role::class);
+    }
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    public static function getLabel(): string
+    {
+        return __('filament-spatie-roles-and-permissions::filament-spatie.section.role');
+    }
+
+    protected static function getNavigationGroup(): ?string
+    {
+        return __('filament-spatie-roles-and-permissions::filament-spatie.section.roles_and_permissions');
+    }
+
+    public static function getPluralLabel(): string
+    {
+        return __('filament-spatie-roles-and-permissions::filament-spatie.section.roles');
+    }
 
     protected static function getNavigationLabel(): string
     {
