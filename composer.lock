@@ -765,12 +765,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel-filament/admin.git",
-                "reference": "cef78e0b0ac59200e1c8778f453750c1f3fc232c"
+                "reference": "bae47805fe1d13e3b32a6865af196a5168c341cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel-filament/admin/zipball/cef78e0b0ac59200e1c8778f453750c1f3fc232c",
-                "reference": "cef78e0b0ac59200e1c8778f453750c1f3fc232c",
+                "url": "https://api.github.com/repos/laravel-filament/admin/zipball/bae47805fe1d13e3b32a6865af196a5168c341cd",
+                "reference": "bae47805fe1d13e3b32a6865af196a5168c341cd",
                 "shasum": ""
             },
             "require": {
@@ -818,7 +818,7 @@
                 "issues": "https://github.com/laravel-filament/filament/issues",
                 "source": "https://github.com/laravel-filament/filament"
             },
-            "time": "2021-12-28T22:33:27+00:00"
+            "time": "2021-12-30T00:24:51+00:00"
         },
         {
             "name": "filament/forms",

@@ -11,14 +11,18 @@ use Filament\Resources\Table;
 use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Spatie\Permission\Models\Role;
-use App\Filament\Resources\RoleResource\Pages;
-use App\Filament\Resources\RoleResource\RelationManagers;
+use Reksmey\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages;
 
 class RoleResource extends Resource
 {
     protected static ?string $model = Role::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    protected static function getNavigationLabel(): string
+    {
+        return __('Roles & Permissions');
+    }
 
     public static function form(Form $form): Form
     {
