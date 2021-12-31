@@ -40,7 +40,7 @@ class RoleResource extends Resource
 
     protected static function getNavigationLabel(): string
     {
-        return __('Roles & Permissions');
+        return __('filament-spatie-roles-and-permissions::filament-spatie.section.roles');
     }
 
     public static function form(Form $form): Form
@@ -52,18 +52,20 @@ class RoleResource extends Resource
                     Forms\Components\Card::make()
                         ->schema([
                             Forms\Components\TextInput::make('name')
+                                ->label(__('filament-spatie-roles-and-permissions::filament-spatie.field.name'))
                                 ->required()
                                 ->maxLength(255)
                                 ->unique(Role::class, 'name', fn ($record) => $record),
                             Forms\Components\TextInput::make('guard_name')
+                                ->label(__('filament-spatie-roles-and-permissions::filament-spatie.field.guard_name'))
                                 ->nullable()
                                 ->default(config('auth.defaults.guard'))
                                 ->maxLength(255),
                             Forms\Components\Toggle::make('select_all')
+                                ->label(__('filament-spatie-roles-and-permissions::filament-spatie.field.select_all'))
+                                ->helperText(__('filament-spatie-roles-and-permissions::filament-spatie.message.select_all'))
                                 ->onIcon('heroicon-s-shield-check')
                                 ->offIcon('heroicon-s-shield-exclamation')
-                                ->label('Select All')
-                                ->helperText('Enable all Permissions for this role.')
                                 ->reactive()
                                 ->afterStateUpdated(function (Closure $set, $state) {
                                     foreach (static::getEntities() as $entity) {
@@ -114,6 +116,7 @@ class RoleResource extends Resource
                 $entities[] = Forms\Components\Card::make()
                     ->schema([
                         Forms\Components\Toggle::make($entity)
+                            ->label(__($entity))
                             ->onIcon('heroicon-s-lock-open')
                             ->offIcon('heroicon-s-lock-closed')
                             ->reactive()
@@ -141,6 +144,7 @@ class RoleResource extends Resource
                                 }
                             }),
                         Forms\Components\Fieldset::make('Permissions')
+                        ->label(__('filament-spatie-roles-and-permissions::filament-spatie.field.permissions'))
                         ->extraAttributes(['class' => 'text-primary-600','style' => 'border-color:var(--primary)'])
                         ->columns([
                             'default' => 2,
@@ -159,7 +163,7 @@ class RoleResource extends Resource
 
         return collect(static::getPermissions())->reduce(function ($permissions, $permission) use ($entity) {
             $permissions[] = Forms\Components\Checkbox::make($entity.'_'.$permission)
-                                ->label($permission)
+                                ->label(__($permission))
                                 ->extraAttributes(['class' => 'text-primary-600'])
                                 ->afterStateHydrated(function (Closure $set, Closure $get, $record) use($entity, $permission) {
                                     if (is_null($record)) return;
@@ -241,12 +245,15 @@ class RoleResource extends Resource
         return $table
             ->columns([
                 Columns\TextColumn::make('name')
+                    ->label(__('filament-spatie-roles-and-permissions::filament-spatie.field.name'))
                     ->sortable()
                     ->searchable(),
                 Columns\TextColumn::make('created_at')
+                    ->label(__('filament-spatie-roles-and-permissions::filament-spatie.field.created_at'))
                     ->sortable()
                     ->searchable(),
                 Columns\TextColumn::make('updated_at')
+                    ->label(__('filament-spatie-roles-and-permissions::filament-spatie.field.updated_at'))
                     ->sortable()
                     ->searchable(),
             ])
