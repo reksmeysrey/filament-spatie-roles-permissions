@@ -136,7 +136,7 @@ class RoleResource extends Resource
                                 $set('select_all', true); // if all toggles on => turn select_all on
                             }
 
-                            if (in_array(true, $entityStates, true) === false) {
+                            if (in_array(false, $entityStates, true) === true) {
                                 $set('select_all', false); // if even one toggle off => turn select_all off
                             }
                         }),
@@ -187,7 +187,7 @@ class RoleResource extends Resource
                         $set('select_all', true); // if all toggles on => turn select_all on
                     }
 
-                    if (in_array(true, $entityStates, true) === false) {
+                    if (in_array(false, $entityStates, true) === true) {
                         $set('select_all', false); // if even one toggle off => turn select_all off
                     }
                 })
@@ -202,7 +202,7 @@ class RoleResource extends Resource
                         $set($entity, true); // if all permissions true => turn toggle on
                     }
 
-                    if (in_array(true, $permissionStates, true) === false) {
+                    if (in_array(false, $permissionStates, true) === true) {
                         $set($entity, false); // if even one false => turn toggle off
                     }
 
@@ -220,7 +220,7 @@ class RoleResource extends Resource
                         $set('select_all', true); // if all toggles on => turn select_all on
                     }
 
-                    if (in_array(true, $entityStates, true) === false) {
+                    if (in_array(false, $entityStates, true) === true) {
                         $set('select_all', false); // if even one toggle off => turn select_all off
                     }
                 });
