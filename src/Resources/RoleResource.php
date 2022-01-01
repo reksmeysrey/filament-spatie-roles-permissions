@@ -118,9 +118,10 @@ class RoleResource extends Resource
                         ->offIcon('heroicon-s-lock-closed')
                         ->reactive()
                         ->afterStateUpdated(function (Closure $set, Closure $get, $state) use ($entity) {
-
                             collect(static::getPermissions())
-                                ->each(fn($permission) => $set($entity . '_' . $permission, $state));
+                                ->each(function (string $permission) use ($set, $entity, $state) {
+                                    $set($entity . '_' . $permission, $state);
+                                });
 
                             if (!$state) {
                                 $set('select_all', false);
