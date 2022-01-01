@@ -228,11 +228,15 @@ class RoleResource extends Resource
         }, []);
     }
 
-    protected static function getSlugPermissions(): ?array
+    protected static function getSlugPermissions(): array
     {
-        return array_map(function ($action) {
-            return Str::slug($action, '_');
-        }, collect(config('filament-permission.permissions', []))->flatten()->values()->all());
+        return collect(config('filament-permission.permissions', []))
+            ->flatten()
+            ->values()
+            ->map(function (string $action) {
+                return Str::slug($action, '_');
+            })
+            ->all();
     }
 
     public static function table(Table $table): Table
