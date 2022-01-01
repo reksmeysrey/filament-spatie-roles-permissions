@@ -127,18 +127,7 @@ class RoleResource extends Resource
                                 $set('select_all', false);
                             }
 
-                            $entityStates = [];
-                            foreach (static::getEntities() as $ent) {
-                                $entityStates [] = $get($ent);
-                            }
-
-                            if (in_array(false, $entityStates, true) === false) {
-                                $set('select_all', true); // if all toggles on => turn select_all on
-                            }
-
-                            if (in_array(false, $entityStates, true) === true) {
-                                $set('select_all', false); // if even one toggle off => turn select_all off
-                            }
+                            static::freshSelectAll($get, $set);
                         }),
                     Forms\Components\Fieldset::make('Permissions')
                         ->label(__('filament-spatie-roles-and-permissions::filament-spatie.field.permissions'))
@@ -178,18 +167,7 @@ class RoleResource extends Resource
                         $set('select_all', false);
                     }
 
-                    $entityStates = [];
-                    foreach (static::getEntities() as $ent) {
-                        $entityStates [] = $get($ent);
-                    }
-
-                    if (in_array(false, $entityStates, true) === false) {
-                        $set('select_all', true); // if all toggles on => turn select_all on
-                    }
-
-                    if (in_array(false, $entityStates, true) === true) {
-                        $set('select_all', false); // if even one toggle off => turn select_all off
-                    }
+                    static::freshSelectAll($get, $set);
                 })
                 ->reactive()
                 ->afterStateUpdated(function (Closure $set, Closure $get, $state) use ($entity) {
@@ -211,18 +189,7 @@ class RoleResource extends Resource
                         $set('select_all', false);
                     }
 
-                    $entityStates = [];
-                    foreach (static::getEntities() as $ent) {
-                        $entityStates [] = $get($ent);
-                    }
-
-                    if (in_array(false, $entityStates, true) === false) {
-                        $set('select_all', true); // if all toggles on => turn select_all on
-                    }
-
-                    if (in_array(false, $entityStates, true) === true) {
-                        $set('select_all', false); // if even one toggle off => turn select_all off
-                    }
+                    static::freshSelectAll($get, $set);
                 });
             return $permissions;
         }, []);
@@ -237,6 +204,21 @@ class RoleResource extends Resource
                 return Str::slug($action, '_');
             })
             ->all();
+    }
+
+    protected static function freshSelectAll(Closure $get, Closure $set): void
+    {
+        $entityStates = collect(static::getEntities())
+            ->map(fn(string $entity): bool => (bool)$get($entity))
+            ->all();
+
+        if (in_array(false, $entityStates, true) === false) {
+            $set('select_all', true); // if all toggles on => turn select_all on
+        }
+
+        if (in_array(false, $entityStates, true) === true) {
+            $set('select_all', false); // if even one toggle off => turn select_all off
+        }
     }
 
     public static function table(Table $table): Table
