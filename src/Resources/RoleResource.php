@@ -15,7 +15,6 @@ use Reksmey\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages;
 
 class RoleResource extends Resource
 {
-
     public static function getModel(): string
     {
         return config('permission.models.role', Role::class);
@@ -90,7 +89,7 @@ class RoleResource extends Resource
             ]);
     }
 
-    protected static function getEntities(): ?array
+    protected static function getEntities(): array
     {
         return collect(Filament::getResources())
             ->merge(static::getSlugPermissions())
@@ -109,7 +108,7 @@ class RoleResource extends Resource
 
     protected static function getEntitySchema(): array
     {
-        return collect(static::getEntities())->reduce(function ($entities, $entity) {
+        return collect(static::getEntities())->reduce(function (array $entities, string $entity) {
             $entities[] = Forms\Components\Card::make()
                 ->schema([
                     Forms\Components\Toggle::make($entity)
@@ -117,7 +116,7 @@ class RoleResource extends Resource
                         ->onIcon('heroicon-s-lock-open')
                         ->offIcon('heroicon-s-lock-closed')
                         ->reactive()
-                        ->afterStateUpdated(function (Closure $set, Closure $get, $state) use ($entity) {
+                        ->afterStateUpdated(function (Closure $set, Closure $get, bool $state) use ($entity) {
                             collect(static::getPermissions())
                                 ->each(function (string $permission) use ($set, $entity, $state) {
                                     $set($entity . '_' . $permission, $state);
@@ -144,9 +143,9 @@ class RoleResource extends Resource
         }, []);
     }
 
-    protected static function getPermissionsSchema($entity): array
+    protected static function getPermissionsSchema(string $entity): array
     {
-        return collect(static::getPermissions())->reduce(function ($permissions, $permission) use ($entity) {
+        return collect(static::getPermissions())->reduce(function (array $permissions, string $permission) use ($entity) {
             $permissions[] = Forms\Components\Checkbox::make($entity . '_' . $permission)
                 ->label(__($permission))
                 ->extraAttributes(['class' => 'text-primary-600'])
@@ -170,7 +169,7 @@ class RoleResource extends Resource
                     static::freshSelectAll($get, $set);
                 })
                 ->reactive()
-                ->afterStateUpdated(function (Closure $set, Closure $get, $state) use ($entity) {
+                ->afterStateUpdated(function (Closure $set, Closure $get, bool $state) use ($entity) {
                     $permissionStates = [];
                     foreach (static::getPermissions() as $perm) {
                         $permissionStates [] = $get($entity . '_' . $perm);
