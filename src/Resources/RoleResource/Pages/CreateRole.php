@@ -11,14 +11,14 @@ class CreateRole extends CreateRecord
 {
     protected static string $resource = RoleResource::class;
 
-    public $permissions;
+    public array $permissions;
 
-    public function beforeCreate()
+    public function beforeCreate(): void
     {
         $this->permissions = array_keys(array_filter(Arr::except($this->data, ['name', 'select_all', 'guard_name'])));
     }
 
-    public function afterCreate()
+    public function afterCreate(): void
     {
         $permissions = [];
         foreach ($this->permissions as $name) {

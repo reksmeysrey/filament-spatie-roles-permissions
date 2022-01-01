@@ -22,6 +22,4 @@ class FilamentSpatieRolesPermissionsServiceProvider extends PluginServiceProvide
             __DIR__ . '/../database/seeders/RolesAndPermissionsSeeder.php' => database_path('seeders/RolesAndPermissionsSeeder.php'),
         ], 'role-permission-seeds');
     }
-
-
 }

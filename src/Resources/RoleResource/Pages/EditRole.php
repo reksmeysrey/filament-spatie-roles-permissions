@@ -11,7 +11,7 @@ class EditRole extends EditRecord
 {
     protected static string $resource = RoleResource::class;
 
-    public $permissions;
+    public array $permissions;
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
@@ -20,7 +20,7 @@ class EditRole extends EditRecord
         return Arr::Only($data, 'name');
     }
 
-    public function afterSave()
+    public function afterSave(): void
     {
         $permissions = [];
         foreach ($this->permissions as $name) {
@@ -31,10 +31,8 @@ class EditRole extends EditRecord
         $this->record->syncPermissions($permissions);
     }
 
-    public static function onlyPermissionsKeys($data)
+    public static function onlyPermissionsKeys($data): array
     {
-        return array_keys(array_filter(Arr::except($data, ['guard_name', 'id','name', 'select_all', 'created_at', 'updated_at'])));
+        return array_keys(array_filter(Arr::except($data, ['guard_name', 'id', 'name', 'select_all', 'created_at', 'updated_at'])));
     }
-
-
 }
