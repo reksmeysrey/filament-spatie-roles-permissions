@@ -209,14 +209,13 @@ class RoleResource extends Resource
     protected static function freshSelectAll(Closure $get, Closure $set): void
     {
         $entityStates = collect(static::getEntities())
-            ->map(fn(string $entity): bool => (bool)$get($entity))
-            ->all();
+            ->map(fn(string $entity): bool => (bool)$get($entity));
 
-        if (in_array(false, $entityStates, true) === false) {
+        if ($entityStates->containsStrict(false) === false) {
             $set('select_all', true); // if all toggles on => turn select_all on
         }
 
-        if (in_array(false, $entityStates, true) === true) {
+        if ($entityStates->containsStrict(false) === true) {
             $set('select_all', false); // if even one toggle off => turn select_all off
         }
     }
