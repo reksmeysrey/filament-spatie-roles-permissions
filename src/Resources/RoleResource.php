@@ -107,7 +107,7 @@ class RoleResource extends Resource
         return ['view', 'viewAny', 'create', 'delete', 'deleteAny', 'update'];
     }
 
-    public static function getEntitySchema(): array
+    protected static function getEntitySchema(): array
     {
         return collect(static::getEntities())->reduce(function ($entities, $entity) {
             $entities[] = Forms\Components\Card::make()
@@ -119,9 +119,8 @@ class RoleResource extends Resource
                         ->reactive()
                         ->afterStateUpdated(function (Closure $set, Closure $get, $state) use ($entity) {
 
-                            collect(static::getPermissions())->each(function ($permission) use ($set, $entity, $state) {
-                                $set($entity . '_' . $permission, $state);
-                            });
+                            collect(static::getPermissions())
+                                ->each(fn($permission) => $set($entity . '_' . $permission, $state));
 
                             if (!$state) {
                                 $set('select_all', false);
@@ -144,13 +143,13 @@ class RoleResource extends Resource
         }, []);
     }
 
-    public static function getPermissionsSchema($entity): array
+    protected static function getPermissionsSchema($entity): array
     {
         return collect(static::getPermissions())->reduce(function ($permissions, $permission) use ($entity) {
             $permissions[] = Forms\Components\Checkbox::make($entity . '_' . $permission)
                 ->label(__($permission))
                 ->extraAttributes(['class' => 'text-primary-600'])
-                ->afterStateHydrated(function (Closure $set, Closure $get, $record) use ($entity, $permission) {
+                ->afterStateHydrated(function (Closure $set, Closure $get, ?Role $record) use ($entity, $permission) {
                     if (is_null($record)) return;
 
                     $existed = $record->hasPermissionTo($entity . '_' . $permission);
