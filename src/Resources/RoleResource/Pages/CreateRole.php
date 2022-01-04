@@ -22,13 +22,13 @@ class CreateRole extends CreateRecord
     {
         $permissions = [];
         foreach ($this->permissions as $name) {
-            $permissions[] = Permission::findOrCreate($name);
+            $permissions[] = Permission::findOrCreate($name, $this->record->guard_name);
         }
         $this->record->syncPermissions($permissions);
     }
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        return Arr::Only($this->data, 'name');
+        return Arr::Only($this->data, ['name', 'guard_name']);
     }
 }
