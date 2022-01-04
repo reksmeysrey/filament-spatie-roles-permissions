@@ -17,14 +17,14 @@ class EditRole extends EditRecord
     {
         $this->permissions = static::onlyPermissionsKeys($data);
 
-        return Arr::Only($data, 'name');
+        return Arr::only($data, ['name', 'guard_name']);
     }
 
     public function afterSave(): void
     {
         $permissions = [];
         foreach ($this->permissions as $name) {
-            $permissions[] = Permission::findOrCreate($name);
+            $permissions[] = Permission::findOrCreate($name, $this->record->guard_name);
         }
 
         $this->record->touch();
