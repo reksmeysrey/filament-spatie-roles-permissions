@@ -3,15 +3,16 @@
 namespace Reksmey\FilamentSpatieRolesPermissions\Resources;
 
 use Closure;
-use Filament\Forms;
-use Illuminate\Support\Str;
-use Filament\Resources\Form;
-use Filament\Tables\Columns;
-use Filament\Resources\Table;
 use Filament\Facades\Filament;
+use Filament\Forms;
+use Filament\Resources\Form;
 use Filament\Resources\Resource;
-use Spatie\Permission\Models\Role;
+use Filament\Resources\Table;
+use Filament\Tables\Columns;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Unique;
 use Reksmey\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages;
+use Spatie\Permission\Models\Role;
 
 class RoleResource extends Resource
 {
@@ -54,7 +55,15 @@ class RoleResource extends Resource
                                     ->label(__('filament-spatie-roles-and-permissions::filament-spatie.field.name'))
                                     ->required()
                                     ->maxLength(255)
-                                    ->unique(Role::class, 'name', fn($record) => $record),
+                                    ->unique(
+                                        ignorable: fn(?Role $record): ?Role => $record,
+                                        callback: function (Unique $rule, callable $get): Unique {
+                                            $guardName = $get('guard_name') ?? config('auth.defaults.guard');
+
+                                            return $rule
+                                                ->where('guard_name', $guardName);
+                                        }
+                                    ),
                                 Forms\Components\Select::make('guard_name')
                                     ->label(__('filament-spatie-roles-and-permissions::filament-spatie.field.guard_name'))
                                     ->nullable()
