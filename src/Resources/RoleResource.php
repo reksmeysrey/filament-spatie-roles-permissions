@@ -55,11 +55,15 @@ class RoleResource extends Resource
                                     ->required()
                                     ->maxLength(255)
                                     ->unique(Role::class, 'name', fn($record) => $record),
-                                Forms\Components\TextInput::make('guard_name')
+                                Forms\Components\Select::make('guard_name')
                                     ->label(__('filament-spatie-roles-and-permissions::filament-spatie.field.guard_name'))
                                     ->nullable()
-                                    ->default(config('auth.defaults.guard'))
-                                    ->maxLength(255),
+                                    ->options(function (): array {
+                                        $guards = array_keys(config('auth.guards', []));
+
+                                        return array_combine($guards, $guards);
+                                    })
+                                    ->default(config('auth.defaults.guard')),
                                 Forms\Components\Toggle::make('select_all')
                                     ->label(__('filament-spatie-roles-and-permissions::filament-spatie.field.select_all'))
                                     ->helperText(__('filament-spatie-roles-and-permissions::filament-spatie.message.select_all'))
