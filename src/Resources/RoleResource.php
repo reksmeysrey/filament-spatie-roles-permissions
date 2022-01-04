@@ -152,8 +152,8 @@ class RoleResource extends Resource
                 ->afterStateHydrated(function (Closure $set, Closure $get, ?Role $record) use ($entity, $permission) {
                     if (is_null($record)) return;
 
-                    $existed = $record->hasPermissionTo($entity . '_' . $permission);
-                    $existed_Module = $record->hasPermissionTo($entity);
+                    $existed = $record->checkPermissionTo($entity . '_' . $permission);
+                    $existed_Module = $record->checkPermissionTo($entity);
 
                     if ($existed) {
                         $set($entity . '_' . $permission, $existed);
