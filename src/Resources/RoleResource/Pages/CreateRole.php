@@ -29,6 +29,6 @@ class CreateRole extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        return Arr::Only($this->data, ['name', 'guard_name']);
+        return Arr::only($this->data, ['name', 'guard_name']);
     }
 }
