@@ -42,7 +42,7 @@ return $form->schema([
 You can publish permissions seeders in additional permissions. Sometimes you may add more action such as download-pdf, export, etc.
 
 ```php
-php artisan vendor:publish --tag=role-permission-seeds
+php artisan vendor:publish --tag=filament-spatie-roles-and-permissions-seeders
 
 Then
 
@@ -50,6 +50,26 @@ php artisan db:seeder --class=RolesAndPermissionsSeeder
 
 ```
 
+## Customize RoleResource
+- publish service provider
+    ```php
+    php artisan vendor:publish --tag=filament-spatie-roles-and-permissions-provider
+    ```
+- add the package to the `extra.laravel.dont-discover` key in `composer.json`, e.g.
+  ```json
+  "extra": {
+    "laravel": {
+      "dont-discover": [
+        "reksmey/filament-spatie-roles-permissions"
+      ]
+    }
+  }
+  ```
+- publish RoleResource
+  ```php
+  php artisan filament-spatie-roles-permissions:publish-role-resource
+  ```
+- you can customize RoleResource in App\Filament
 ##### [For authorization, Filament will observe any model policies that are registered in your app](https://filamentadmin.com/docs/2.x/admin/resources#authorization)
 
 Hope you enjoy it ❤️

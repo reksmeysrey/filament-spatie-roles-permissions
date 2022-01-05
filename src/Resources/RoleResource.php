@@ -3,14 +3,13 @@
 namespace Reksmey\FilamentSpatieRolesPermissions\Resources;
 
 use Closure;
-use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables\Columns;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
+use Reksmey\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsFacade;
 use Reksmey\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages;
 use Spatie\Permission\Models\Role;
 
@@ -80,10 +79,10 @@ class RoleResource extends Resource
                                     ->offIcon('heroicon-s-shield-exclamation')
                                     ->reactive()
                                     ->afterStateUpdated(function (Closure $set, $state) {
-                                        foreach (static::getEntities() as $entity) {
+                                        foreach (FilamentSpatieRolesPermissionsFacade::getEntities() as $entity) {
                                             $set($entity, $state);
 
-                                            foreach (static::getPermissions() as $perm) {
+                                            foreach (FilamentSpatieRolesPermissionsFacade::getPermissions() as $perm) {
                                                 $set($entity . '_' . $perm, $state);
                                             }
                                         }
@@ -102,26 +101,9 @@ class RoleResource extends Resource
             ]);
     }
 
-    protected static function getEntities(): array
-    {
-        return collect(Filament::getResources())
-            ->merge(static::getSlugPermissions())
-            ->unique()
-            ->reduce(function ($options, $resource) {
-                $option = Str::before(Str::afterLast($resource, '\\'), 'Resource');
-                $options[$option] = $option;
-                return $options;
-            }, []);
-    }
-
-    protected static function getPermissions(): array
-    {
-        return ['view', 'viewAny', 'create', 'delete', 'deleteAny', 'update'];
-    }
-
     protected static function getEntitySchema(): array
     {
-        return collect(static::getEntities())->reduce(function (array $entities, string $entity) {
+        return collect(FilamentSpatieRolesPermissionsFacade::getEntities())->reduce(function (array $entities, string $entity) {
             $entities[] = Forms\Components\Card::make()
                 ->schema([
                     Forms\Components\Toggle::make($entity)
@@ -130,7 +112,7 @@ class RoleResource extends Resource
                         ->offIcon('heroicon-s-lock-closed')
                         ->reactive()
                         ->afterStateUpdated(function (Closure $set, Closure $get, bool $state) use ($entity) {
-                            collect(static::getPermissions())
+                            collect(FilamentSpatieRolesPermissionsFacade::getPermissions())
                                 ->each(function (string $permission) use ($set, $entity, $state) {
                                     $set($entity . '_' . $permission, $state);
                                 });
@@ -158,7 +140,7 @@ class RoleResource extends Resource
 
     protected static function getPermissionsSchema(string $entity): array
     {
-        return collect(static::getPermissions())->reduce(function (array $permissions, string $permission) use ($entity) {
+        return collect(FilamentSpatieRolesPermissionsFacade::getPermissions())->reduce(function (array $permissions, string $permission) use ($entity) {
             $permissions[] = Forms\Components\Checkbox::make($entity . '_' . $permission)
                 ->label(__($permission))
                 ->extraAttributes(['class' => 'text-primary-600'])
@@ -184,7 +166,7 @@ class RoleResource extends Resource
                 ->reactive()
                 ->afterStateUpdated(function (Closure $set, Closure $get, bool $state) use ($entity) {
                     $permissionStates = [];
-                    foreach (static::getPermissions() as $perm) {
+                    foreach (FilamentSpatieRolesPermissionsFacade::getPermissions() as $perm) {
                         $permissionStates [] = $get($entity . '_' . $perm);
                     }
 
@@ -207,20 +189,9 @@ class RoleResource extends Resource
         }, []);
     }
 
-    protected static function getSlugPermissions(): array
-    {
-        return collect(config('filament-permission.permissions', []))
-            ->flatten()
-            ->values()
-            ->map(function (string $action) {
-                return Str::slug($action, '_');
-            })
-            ->all();
-    }
-
     protected static function freshSelectAll(Closure $get, Closure $set): void
     {
-        $entityStates = collect(static::getEntities())
+        $entityStates = collect(FilamentSpatieRolesPermissionsFacade::getEntities())
             ->map(fn(string $entity): bool => (bool)$get($entity));
 
         if ($entityStates->containsStrict(false) === false) {

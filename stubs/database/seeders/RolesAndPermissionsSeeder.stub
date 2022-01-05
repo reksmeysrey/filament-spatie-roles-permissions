@@ -1,0 +1,31 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Reksmey\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsFacade;
+use Spatie\Permission\Models\Permission;
+
+class RolesAndPermissionsSeeder extends Seeder
+{
+    public function run(): void
+    {
+        collect(static::getPermissionNames())
+            ->each(fn($permission) => Permission::findOrCreate($permission));
+    }
+
+    public static function getPermissionNames(): ?array
+    {
+        return collect(FilamentSpatieRolesPermissionsFacade::getEntities())
+            ->map(function ($entity) {
+                return collect(FilamentSpatieRolesPermissionsFacade::getPermissions())
+                    ->map(function ($permission) use ($entity) {
+                        return $entity . '_' . $permission;
+                    })
+                    ->all();
+            })
+            ->flatten()
+            ->values()
+            ->all();
+    }
+}

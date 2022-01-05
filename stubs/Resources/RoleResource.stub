@@ -1,0 +1,10 @@
+<?php
+
+namespace App\Filament\Resources;
+
+use Reksmey\FilamentSpatieRolesPermissions\Resources\RoleResource as BaseResource;
+
+class RoleResource extends BaseResource
+{
+    // stub
+}

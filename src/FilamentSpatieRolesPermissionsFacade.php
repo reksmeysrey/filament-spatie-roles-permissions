@@ -5,16 +5,13 @@ namespace Reksmey\FilamentSpatieRolesPermissions;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Althinect\FilamentSpatieRolesPermissions\Skeleton\SkeletonClass
+ * @method static array getEntities()
+ * @method static array getSlugPermissions()
+ * @method static array getPermissions()
  */
 class FilamentSpatieRolesPermissionsFacade extends Facade
 {
-    /**
-     * Get the registered name of the component.
-     *
-     * @return string
-     */
-    protected static function getFacadeAccessor()
+    protected static function getFacadeAccessor(): string
     {
         return 'filament-spatie-roles-permissions';
     }

@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Providers;
+
+use Filament\PluginServiceProvider;
+use Reksmey\FilamentSpatieRolesPermissions\Resources\RoleResource;
+use Reksmey\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsServiceProvider as BaseProvider;
+
+class FilamentSpatieRolesPermissionsServiceProvider extends BaseProvider
+{
+    protected function getResources(): array
+    {
+        return [];
+    }
+}
