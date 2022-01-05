@@ -1,0 +1,11 @@
+<?php
+
+namespace App\Filament\Resources\RoleResource\Pages;
+
+use App\Filament\Resources\RoleResource;
+use Reksmey\FilamentSpatieRolesPermissions\Resources\RoleResource\Pages\EditRole as BaseEditRole;
+
+class EditRole extends BaseEditRole
+{
+    protected static string $resource = RoleResource::class;
+}
