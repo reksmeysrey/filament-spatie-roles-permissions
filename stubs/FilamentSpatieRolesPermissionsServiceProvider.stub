@@ -2,12 +2,17 @@
 
 namespace App\Providers;
 
-use Filament\PluginServiceProvider;
-use Reksmey\FilamentSpatieRolesPermissions\Resources\RoleResource;
 use Reksmey\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsServiceProvider as BaseProvider;
 
 class FilamentSpatieRolesPermissionsServiceProvider extends BaseProvider
 {
+    public function configurePackage(Package $package): void
+    {
+        $package->setBasePath(app_path('../vendor/reksmey/filament-spatie-roles-permissions/src'));
+
+        parent::configurePackage($package);
+    }
+
     protected function getResources(): array
     {
         return [];
