@@ -1,6 +1,11 @@
 # Changelog
 
-## 1.1.0 - 2022-01-12
+## [v1.1.1] - 2022-01-12
+
+### Added
+- Testing Workflow
+
+## [v1.1.0] - 2022-01-12
 
 ## What's Changed
 
@@ -10,6 +15,6 @@
 
 All notable changes to `filament-spatie-roles-permission` will be documented in this file.
 
-## 1.0.0 - 202X-XX-XX
+## [v1.0.0] - 202X-XX-XX
 
 - initial release
