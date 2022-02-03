@@ -46,7 +46,7 @@ php artisan vendor:publish --tag=filament-spatie-roles-and-permissions-seeders
 
 Then
 
-php artisan db:seeder --class=RolesAndPermissionsSeeder
+php artisan db:seed --class=RolesAndPermissionsSeeder
 
 ```
 
